@@ -1,0 +1,6 @@
+social_swiftmail.settings:
+  title: 'Email notification settings'
+  description: 'E-mail template settings.'
+  route_name: social_swiftmail.settings
+  parent: social_core.admin.config.social
+  weight: 52

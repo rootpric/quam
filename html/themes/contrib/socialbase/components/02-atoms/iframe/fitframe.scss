@@ -1,0 +1,19 @@
+@import 'settings';
+
+.iframe-container {
+  max-width: 100% !important;
+
+  .twitter-tweet,
+  .fb_iframe_widget,
+  iframe {
+    max-width: 100% !important;
+    width: 100% !important;
+    min-height: auto;
+    height: 400px;
+
+    @include for-phone-only {
+      height: 300px;
+    }
+  }
+
+}

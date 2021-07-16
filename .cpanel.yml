@@ -1,0 +1,10 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/admin/public_html/social/social
+    - /bin/cp -R html/ $DEPLOYPATH
+    - /bin/cp -R vendor/ $DEPLOYPATH
+    - /bin/cp composer.json $DEPLOYPATH
+    - /bin/cp composer.lock $DEPLOYPATH
+    - /bin/cp README.md $DEPLOYPATH
+    - /bin/cp LICENSE $DEPLOYPATH

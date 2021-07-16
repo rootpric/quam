@@ -1,0 +1,24 @@
+name: Activity Basics
+type: module
+description: Basic implementation of activites in Open Social
+core_version_requirement: ^8.8 || ^9
+package: Custom
+dependencies:
+  - social:activity_creator
+  - social:activity_logger
+  - social:activity_viewer
+  - drupal:block_content
+  - drupal:comment
+  - dynamic_entity_reference:dynamic_entity_reference
+  - drupal:field
+  - drupal:file
+  - group:group
+  - drupal:menu_link_content
+  - message:message
+  - drupal:node
+  - drupal:options
+  - profile:profile
+  - drupal:taxonomy
+  - token:token
+  - drupal:text
+  - drupal:user

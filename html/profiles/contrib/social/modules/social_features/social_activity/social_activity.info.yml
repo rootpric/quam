@@ -1,0 +1,38 @@
+name: 'Social Activity'
+description: 'Provides activity stream for Open Social.'
+type: module
+core_version_requirement: ^8.8 || ^9
+dependencies:
+  - social:activity_basics
+  - social:activity_send_email
+  - drupal:block
+  - drupal:block_content
+  - drupal:comment
+  - crop:crop
+  - dynamic_entity_reference:dynamic_entity_reference
+  - drupal:field
+  - drupal:file
+  - flag:flag
+  - group:group
+  - social:mentions
+  - drupal:menu_link_content
+  - message:message
+  - drupal:node
+  - drupal:options
+  - profile:profile
+  - search_api:search_api
+  - social:social_comment
+  - social:social_editor
+  - social:social_event
+  - social:social_font
+  - social:social_group
+  - social:social_post
+  - social:social_topic
+  - social:social_queue_storage
+  - drupal:taxonomy
+  - drupal:text
+  - drupal:user
+  - drupal:views
+  - votingapi:votingapi
+  - update_helper:update_helper
+package: Social

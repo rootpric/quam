@@ -1,0 +1,12 @@
+name: 'Social Comment Upload'
+description: 'Provides ability to upload files in comments'
+type: module
+core_version_requirement: ^8.8 || ^9
+package: Social
+dependencies:
+  - drupal:comment
+  - drupal:field
+  - field_group:field_group
+  - drupal:file
+  - social:social_comment
+  - drupal:text

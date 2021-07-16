@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.user.full
+  module:
+    - user
+_core:
+  default_config_hash: Q0XhfQDJskQ6lK21AWfMJuXpz-8thFdxA2CLj6Yg7ng
+id: user.user.full
+targetEntityType: user
+bundle: user
+mode: full
+content: {  }
+hidden:
+  groups: true
+  groups_type_closed_group: true
+  groups_type_open_group: true
+  groups_type_public_group: true
+  member_for: true
+  profile_main: true
+  profile_profile: true
+  profile_profiles: true
+  search_api_excerpt: true

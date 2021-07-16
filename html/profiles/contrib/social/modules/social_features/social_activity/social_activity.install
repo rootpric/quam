@@ -1,0 +1,262 @@
+<?php
+
+/**
+ * @file
+ * The Social activity install.
+ */
+
+use Drupal\Core\Entity\Entity\EntityViewDisplay;
+use Drupal\Core\Entity\Entity\EntityViewMode;
+use Drupal\menu_link_content\Entity\MenuLinkContent;
+use Drupal\message\Entity\MessageTemplate;
+
+/**
+ * Social activity install function.
+ */
+function social_activity_install() {
+  // Add menu items.
+  _social_activity_create_menu_links();
+}
+
+/**
+ * Function to create some menu items.
+ */
+function _social_activity_create_menu_links() {
+  $menu_links = MenuLinkContent::loadMultiple();
+  $parent = NULL;
+  /** @var \Drupal\menu_link_content\Entity\MenuLinkContent $menu_link */
+  foreach ($menu_links as $menu_link) {
+    if ($menu_link->label() === 'Explore' && $menu_link->isExpanded()) {
+      $parent = 'menu_link_content:' . $menu_link->uuid();
+    }
+  }
+
+  if (!is_null($parent)) {
+    MenuLinkContent::create([
+      'title' => t('Community'),
+      'link' => ['uri' => 'internal:/explore'],
+      'menu_name' => 'main',
+      'expanded' => FALSE,
+      'weight' => 10,
+      'parent' => $parent,
+    ])->save();
+  }
+}
+
+/**
+ * Update all existing Message Templates to work with newest Message version.
+ */
+function social_activity_update_8002() {
+  $templates = MessageTemplate::loadMultiple();
+
+  if (!empty($templates)) {
+    foreach ($templates as $name => $template) {
+      $new_text = [];
+
+      // Check if text is in the wrong format.
+      if (!empty($text_array = $template->get('text'))) {
+
+        foreach ($text_array as $text) {
+          if (is_string($text)) {
+            $new_text[] = [
+              'format' => 'full_html',
+              'value' => $text,
+            ];
+          }
+        }
+
+        // If all text was ok this would be empty,
+        // no need to update in that case.
+        if (!empty($new_text)) {
+          $templates[$name]->set('text', $new_text);
+          $templates[$name]->save();
+
+          $config_name = "message.template.{$template->getConfigTarget()}";
+          $config = \Drupal::service('config.factory')
+            ->getEditable($config_name);
+
+          if (!empty($config)) {
+            $config->set('text', $new_text);
+            $config->save();
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Update Dynamic Entity Reference.
+ *
+ * Related configs to work with latest version of DER.
+ */
+function social_activity_update_8003() {
+  $config = \Drupal::service('config.factory')
+    ->getEditable('core.entity_view_display.activity.activity.default');
+
+  // Only update if config exists and this is not a fresh install.
+  if (!empty($config) && !empty($settings = $config->get('content.field_activity_entity.settings'))) {
+    if (!empty($settings['view_mode'])) {
+      $config->clear('content.field_activity_entity.settings');
+
+      $config->set('content.field_activity_entity.settings', social_activity_get_der_settings());
+      $config->save();
+    }
+  }
+}
+
+/**
+ * Get entity view mode settings for Dynamic Entity Reference update.
+ *
+ * @return array
+ *   View mode settings, keyed by entity machine name.
+ */
+function social_activity_get_der_settings() {
+  $result = [];
+
+  $settings = [
+    'activity' => [
+      'comment',
+      'node',
+      'post',
+    ],
+    'stream' => [
+      'group',
+    ],
+    'default' => [
+      'crop',
+      'event_enrollment',
+      'flagging',
+      'message',
+      'search_api_task',
+      'activity',
+      'block_content',
+      'menu_link_content',
+      'file',
+      'group_content',
+      'profile',
+      'taxonomy_term',
+      'user',
+    ],
+  ];
+
+  foreach ($settings as $view_mode => $entities) {
+    foreach ($entities as $entity) {
+      $result[$entity]['view_mode'] = $view_mode;
+    }
+  }
+
+  return $result;
+}
+
+/**
+ * Update activity stream block descriptions.
+ */
+function social_activity_update_8801() {
+  $config_factory = \Drupal::configFactory();
+  // Load the activity stream.
+  $view = $config_factory->getEditable('views.view.activity_stream');
+  $displays = $view->get('display');
+
+  // Update block_descriptions for the stream blocks.
+  foreach ($displays as $display_name => &$display) {
+    if ($display_name === 'block_stream_homepage') {
+      $display['display_options']['block_description'] = t('Activity stream');
+    }
+    if ($display_name === 'block_stream_homepage_without_post') {
+      $display['display_options']['block_description'] = t('Activity stream - Without Post block');
+    }
+  }
+
+  $view->set('display', $displays);
+  $view->save(TRUE);
+}
+
+/**
+ * Create "Featured" view mode/display for activity.
+ */
+function social_activity_update_8802() {
+  // Create a new activity featured entity view mode.
+  EntityViewMode::create([
+    'targetEntityType' => 'activity',
+    'id' => 'activity.featured',
+    'status' => TRUE,
+    'label' => t('Featured'),
+  ])->save();
+
+  // Create the corresponding entity view display for activity entity type.
+  $display = EntityViewDisplay::load('activity.activity.default')->toArray();
+  $display['content']['field_activity_entity']['settings']['node'] = [
+    'view_mode' => 'featured',
+  ];
+  $display = array_merge($display, [
+    'uuid' => NULL,
+    'targetEntityType' => 'activity',
+    'bundle' => 'activity',
+    'mode' => 'featured',
+  ]);
+  EntityViewDisplay::create($display)->save();
+}
+
+/**
+ * Create "Featured" view mode/display for post.
+ */
+function social_activity_update_8803() {
+  // The body of hook_update has been moved to into social_post module.
+}
+
+/**
+ * Add "Explore Stream" views block.
+ */
+function social_activity_update_8804() {
+  /** @var \Drupal\update_helper\Updater $updateHelper */
+  $updateHelper = \Drupal::service('update_helper.updater');
+
+  // Execute configuration update definitions with logging of success.
+  $updateHelper->executeUpdate('social_activity', 'social_activity_update_8804');
+
+  // Output logged messages to related channel of update execution.
+  return $updateHelper->logger()->output();
+}
+
+/**
+ * Update display_title for activity stream blocks.
+ */
+function social_activity_update_8805() {
+  /** @var \Drupal\update_helper\Updater $updateHelper */
+  $updateHelper = \Drupal::service('update_helper.updater');
+
+  // Execute configuration update definitions with logging of success.
+  $updateHelper->executeUpdate('social_activity', 'social_activity_update_8005');
+
+  // Output logged messages to related channel of update execution.
+  return $updateHelper->logger()->output();
+}
+
+/**
+ * Added new filter for activity_stream view's explore displays.
+ */
+function social_activity_update_8806() {
+  /** @var \Drupal\update_helper\Updater $updateHelper */
+  $updateHelper = \Drupal::service('update_helper.updater');
+
+  // Execute configuration update definitions with logging of success.
+  $updateHelper->executeUpdate('social_activity', 'social_activity_update_8806');
+
+  // Output logged messages to related channel of update execution.
+  return $updateHelper->logger()->output();
+}
+
+/**
+ * Add filter for notifications.
+ */
+function social_activity_update_8807() {
+  /** @var \Drupal\update_helper\Updater $updateHelper */
+  $updateHelper = \Drupal::service('update_helper.updater');
+
+  // Execute configuration update definitions with logging of success.
+  $updateHelper->executeUpdate('social_activity', 'social_activity_update_8807');
+
+  // Output logged messages to related channel of update execution.
+  return $updateHelper->logger()->output();
+}

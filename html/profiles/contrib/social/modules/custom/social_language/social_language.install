@@ -1,0 +1,116 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the social_language module.
+ */
+
+use Drupal\Core\Serialization\Yaml;
+use Drupal\user\Entity\Role;
+
+/**
+ * Implements hook_install().
+ *
+ * Perform actions related to the installation of social_language.
+ */
+function social_language_install() {
+
+  // Set some default permissions.
+  _social_language_set_permissions();
+
+  \Drupal::configFactory()->getEditable('locale.settings')
+    ->set('translation.path', '/tmp')
+    ->save();
+}
+
+/**
+ * Function to set permissions.
+ */
+function _social_language_set_permissions() {
+  $roles = Role::loadMultiple();
+
+  /** @var \Drupal\user\Entity\Role $role */
+  foreach ($roles as $role) {
+    if ($role->id() === 'administrator') {
+      continue;
+    }
+
+    $permissions = _social_language_get_permissions($role->id());
+    user_role_grant_permissions($role->id(), $permissions);
+  }
+}
+
+/**
+ * Build the permissions.
+ */
+function _social_language_get_permissions($role) {
+  // Site manager.
+  $permissions['sitemanager'] = [
+    'create content translations',
+    'delete content translations',
+    'update content translations',
+    'translate any entity',
+  ];
+
+  return isset($permissions[$role]) ? $permissions[$role] : [];
+}
+
+/**
+ * Enable topic type and profile tag taxonomy translation.
+ */
+function social_language_update_8001() {
+  // Install the configuration added as part of this update.
+  $profile_tag_yml = <<<YAML
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.profile_tag
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+id: taxonomy_term.profile_tag
+target_entity_type_id: taxonomy_term
+target_bundle: profile_tag
+default_langcode: site_default
+language_alterable: true
+YAML;
+
+  $topic_types_yml = <<<YAML
+langcode: en
+status: true
+dependencies:
+  config:
+    - taxonomy.vocabulary.topic_types
+  module:
+    - content_translation
+third_party_settings:
+  content_translation:
+    enabled: true
+id: taxonomy_term.topic_types
+target_entity_type_id: taxonomy_term
+target_bundle: topic_types
+default_langcode: site_default
+language_alterable: true
+YAML;
+
+  $new_config = [
+    'language.content_settings.taxonomy_term.profile_tag' => $profile_tag_yml,
+    'language.content_settings.taxonomy_term.topic_types' => $topic_types_yml,
+  ];
+
+  $config_factory = \Drupal::configFactory();
+
+  foreach ($new_config as $name => $yml) {
+    $data = Yaml::decode($yml);
+    $config_factory->getEditable($name)->setData($data)->save(TRUE);
+  }
+
+  // Grant the new permissions for the sitemanager.
+  user_role_grant_permissions('sitemanager', [
+    'translate profile_tag taxonomy_term',
+    'translate topic_types taxonomy_term',
+  ]);
+}

@@ -1,0 +1,25 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_form_mode.user.register
+  module:
+    - user
+_core:
+  default_config_hash: 5XmB0TdrQv500vSDploRnCfyrbBrMfB975V9S17CRaQ
+id: user.user.register
+targetEntityType: user
+bundle: user
+mode: register
+content:
+  account:
+    weight: 0
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  contact: true
+  groups: true
+  language: true
+  profile_profiles: true
+  timezone: true

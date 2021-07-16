@@ -1,0 +1,11 @@
+name: 'Social User Export'
+description: 'Adds ability to export users to a CSV.'
+type: module
+core_version_requirement: ^8.8 || ^9
+package: Social
+dependencies:
+  - drupal:user
+  - csv_serialization:csv_serialization
+  - social:social_profile
+  - profile:profile
+  - views_bulk_operations

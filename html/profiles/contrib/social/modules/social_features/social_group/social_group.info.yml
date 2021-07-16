@@ -1,0 +1,31 @@
+name: 'Social Group'
+description: 'Provides Group feature.'
+type: module
+core_version_requirement: ^8.8 || ^9
+dependencies:
+  - address:address
+  - drupal:block
+  - drupal:datetime
+  - drupal:field
+  - field_group:field_group
+  - drupal:file
+  - gnode:gnode
+  - group:group
+  - group:gvbo
+  - drupal:image
+  - image_widget_crop:image_widget_crop
+  - drupal:node
+  - drupal:path
+  - profile:profile
+  - social:activity_creator
+  - social:social_core
+  - social:social_editor
+  - social:social_event
+  - social:social_profile
+  - social:social_topic
+  - drupal:taxonomy
+  - drupal:text
+  - drupal:user
+  - drupal:views
+  - views_bulk_operations:views_bulk_operations
+package: Social

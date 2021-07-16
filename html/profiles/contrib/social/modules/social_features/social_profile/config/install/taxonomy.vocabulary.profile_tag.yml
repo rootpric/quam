@@ -1,0 +1,10 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - social_profile
+name: 'Profile tag'
+vid: profile_tag
+description: 'CM can tag a user, giving options on filtering / searching users.'
+weight: 0

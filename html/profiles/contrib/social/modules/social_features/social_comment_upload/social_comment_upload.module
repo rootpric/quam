@@ -1,0 +1,169 @@
+<?php
+
+/**
+ * @file
+ * Module file for Social Comment Upload.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\file\Entity\File;
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Alter the weight of the actions, so the upload is last.
+ */
+function social_comment_upload_form_comment_comment_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // If we don't have a file upload field there's nothing to change.
+  if (!isset($form['field_comment_files'])) {
+    return;
+  }
+
+  if (social_comment_upload_is_enabled()) {
+    $form['field_comment_files']['widget']['#file_upload_title'] = '';
+    $form['#attached']['library'][] = 'social_comment_upload/comment_upload';
+    $form['#after_build'][] = 'social_comment_upload_form_comment_comment_form_after_build';
+    // Workaround for fixing behat tests,
+    // which is caused by alter in social_comment module.
+    $form['field_comment_files']['#weight'] = 9;
+    $form['actions']['#weight'] = 8;
+  }
+  else {
+    // Turn it off.
+    $form['field_comment_files']['#access'] = FALSE;
+  }
+}
+
+/**
+ * Removes the select list with "weight" value.
+ */
+function social_comment_upload_form_comment_comment_form_after_build($form, FormStateInterface $form_state) {
+  foreach ($form['field_comment_files']['widget'] as &$element) {
+    if (is_array($element) && isset($element['_weight'])) {
+      unset($element['_weight']);
+    }
+  }
+
+  return $form;
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function social_comment_upload_preprocess_comment(&$variables) {
+  // Alter comments in activity when social_comment_upload is enabled.
+  if (social_comment_upload_is_enabled()) {
+    $count_arr = [];
+    $comment = $variables['elements']['#comment'];
+
+    // For comments in activities we show the amount of attachments.
+    if ($variables['elements']['#view_mode'] === 'activity' ||
+      $variables['elements']['#view_mode'] === 'activity_comment') {
+      /** @var \Drupal\comment\Entity\Comment $comment */
+      if ($comment->hasField('field_comment_files')) {
+        foreach ($comment->field_comment_files as $value) {
+          if (isset($value->target_id)) {
+            $count_arr[] = $value->target_id;
+          }
+        }
+
+        // Add the amount of attachments to the comment.
+        if (!empty($count_arr)) {
+          $variables['comment_attachments_count'] = count($count_arr);
+        }
+      }
+
+      // In case when the comment has replies then we should display the count
+      // of replies for that comment.
+      if (($node = $comment->getCommentedEntity()) instanceof NodeInterface) {
+        $reply_count = \Drupal::entityQuery('comment')
+          ->condition('entity_type', $comment->getCommentedEntityTypeId())
+          ->condition('entity_id', $comment->getCommentedEntityId())
+          ->condition('pid', $comment->id())
+          ->count()
+          ->execute();
+
+        $variables['comment_count'] = $reply_count;
+        $variables['comment_url'] = $node->toUrl()->toString();
+      }
+
+      $more_button = $comment->toLink(t('Read more'))->toString();
+      $variables['more_link'] = $more_button;
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function social_comment_upload_preprocess_file_widget_multiple(&$variables) {
+  if (social_comment_upload_is_enabled()) {
+    $element = $variables['element'];
+
+    if ($element['#field_name'] == 'field_comment_files') {
+      // Remove "weight" column.
+      foreach ($variables['table']['#rows'] as $key => $row) {
+        if (!empty($element['#display_field'])) {
+          unset($variables['table']['#rows'][$key]['data'][2]);
+        }
+        else {
+          unset($variables['table']['#rows'][$key]['data'][1]);
+        }
+      }
+
+      // Remove headers and disable sorting rows.
+      $variables['table']['#header'] = [];
+      $variables['table']['#tabledrag'] = [];
+    }
+  }
+}
+
+/**
+ * Implements hook_comment_delete().
+ */
+function social_comment_upload_comment_delete(EntityInterface $entity) {
+  // If this comment has any files, delete those as well.
+  _social_comment_upload_delete_comment_files($entity);
+}
+
+/**
+ * Deletes the files associated with a comment.
+ *
+ * This can be used to clean up files that were uploaded with a comment once
+ * that comment is being removed.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   The comment for which attached files should be deleted.
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function _social_comment_upload_delete_comment_files(EntityInterface $entity) {
+  // If this comment doesn't have any attached files we abort early.
+  if (!$entity->hasField('field_comment_files') || $entity->get('field_comment_files')->isEmpty()) {
+    return;
+  }
+
+  // Extract all the file ids referred.
+  $file_ids = array_column($entity->get('field_comment_files')->getValue(), 'target_id');
+  // Try to load the actual file objects.
+  if ($files = File::loadMultiple($file_ids)) {
+    // Iterate and delete individual file objects.
+    foreach ($files as $file) {
+      // Delete the file object.
+      $file->delete();
+    }
+  }
+}
+
+/**
+ * A shortcut function for the allow_upload_comments setting.
+ *
+ * @return bool
+ *   Whether attachment uploading for comments is enabled.
+ */
+function social_comment_upload_is_enabled() {
+  return \Drupal::config('social_comment_upload.settings')
+    ->get('allow_upload_comments');
+}

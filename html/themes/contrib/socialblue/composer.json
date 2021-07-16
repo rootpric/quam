@@ -1,0 +1,10 @@
+{
+  "name": "drupal/socialblue",
+  "description": "Demo theme for Open social installations.",
+  "license": "GPL-2.0-or-later",
+  "type": "drupal-theme",
+  "minimum-stability": "dev",
+  "require": {
+      "drupal/socialbase": ">=1.1"
+  }
+}

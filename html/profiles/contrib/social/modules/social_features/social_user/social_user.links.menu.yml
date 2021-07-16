@@ -1,0 +1,18 @@
+user.register:
+  title: 'Sign up'
+  weight: -10
+  route_name: user.register
+  menu_name: account
+  class: Drupal\social_user\Plugin\Menu\SignupMenuLink
+
+social_user.navigation_settings:
+  title: 'Navigation Settings'
+  description: 'Configure the display of icons in the main navigation.'
+  parent: social_core.admin.config.social
+  route_name: social_user.navigation_settings
+
+social_user.admin.config.social.topic:
+  title: 'User settings'
+  route_name: social_user.settings
+  description: 'User settings'
+  parent: social_core.admin.config.social

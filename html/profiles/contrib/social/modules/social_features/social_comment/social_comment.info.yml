@@ -1,0 +1,9 @@
+name: 'Social Comment'
+description: 'Provides default comment type and related configuration'
+type: module
+core_version_requirement: ^8.8 || ^9
+dependencies:
+  - drupal:comment
+  - social:activity_creator
+  - social:social_core
+package: Social

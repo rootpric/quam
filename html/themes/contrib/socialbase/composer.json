@@ -1,0 +1,10 @@
+{
+  "name": "drupal/socialbase",
+  "description": "Base theme for Open social installations.",
+  "license": "GPL-2.0-or-later",
+  "type": "drupal-theme",
+  "minimum-stability": "dev",
+  "require": {
+      "drupal/bootstrap": "3.20"
+  }
+}

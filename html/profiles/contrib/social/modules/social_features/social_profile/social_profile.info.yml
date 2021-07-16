@@ -1,0 +1,23 @@
+name: 'Social Profile'
+description: 'Provides user profiles.'
+type: module
+core_version_requirement: ^8.8 || ^9
+configure: social_profile.settings
+dependencies:
+  - address:address
+  - drupal:block
+  - drupal:field
+  - field_group:field_group
+  - drupal:file
+  - drupal:image
+  - image_widget_crop:image_widget_crop
+  - profile:profile
+  - social:social_core
+  - social:social_editor
+  - drupal:taxonomy
+  - drupal:telephone
+  - drupal:text
+  - drupal:user
+  - drupal:views
+  - select2:select2
+package: Social
