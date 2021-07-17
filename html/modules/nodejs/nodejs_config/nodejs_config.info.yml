@@ -1,0 +1,13 @@
+name: Nodejs Config
+type: module
+description: 'Helps to configure the nodejs module.'
+package: Nodejs
+# core: 8.x
+dependencies:
+  - nodejs:nodejs
+
+# Information added by Drupal.org packaging script on 2018-12-31
+version: '8.x-1.2'
+core: '8.x'
+project: 'nodejs'
+datestamp: 1546227789
