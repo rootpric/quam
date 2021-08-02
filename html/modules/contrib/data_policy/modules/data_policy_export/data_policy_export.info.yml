@@ -7,7 +7,7 @@ dependencies:
   - data_policy
 type: module
 
-# Information added by Drupal.org packaging script on 2021-06-24
-version: '8.x-1.0-rc2'
+# Information added by Drupal.org packaging script on 2021-07-26
+version: '8.x-1.0-rc3'
 project: 'data_policy'
-datestamp: 1624546503
+datestamp: 1627306195

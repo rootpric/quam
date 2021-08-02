@@ -60,4 +60,30 @@ class DataPolicyForm extends ContentEntityForm {
     return TRUE;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function save(array $form, FormStateInterface $form_state) {
+    $active_revision = !empty($form_state->getValue('active_revision'));
+    $new_revision = !empty($form_state->getValue('new_revision'));
+
+    if ($active_revision) {
+      $this->entity->isDefaultRevision(TRUE);
+    }
+    else {
+      $this->entity->isDefaultRevision(FALSE);
+    }
+
+    if ($new_revision) {
+      $this->entity->setNewRevision(TRUE);
+
+      $this->entity->setRevisionCreationTime($this->time->getRequestTime());
+      $this->entity->setRevisionUserId($this->currentUser()->id());
+
+      $this->messenger()->addStatus($this->t('Created new revision.'));
+    }
+
+    return parent::save($form, $form_state);
+  }
+
 }

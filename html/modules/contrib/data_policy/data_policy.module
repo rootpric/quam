@@ -188,3 +188,18 @@ function data_policy_data_policy_delete(EntityInterface $entity) {
     ->set('entity_id', 0)
     ->save();
 }
+
+/**
+ * Implements hook_preprocess_HOOK().
+ */
+function data_policy_preprocess_status_messages(&$variables) {
+  if (isset($variables['message_list']['error'])) {
+    $error_messages = $variables['message_list']['error'];
+    foreach ($error_messages as $delta => $message) {
+      /** @var \Drupal\Core\Render\Markup $message */
+      if (strpos((string) $message, '<a href="#edit-data-policy-data-policy-') !== FALSE) {
+        $variables['message_list']['error'][$delta] = Markup::create(html_entity_decode((string) $message));
+      }
+    }
+  }
+}
