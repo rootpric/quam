@@ -454,6 +454,11 @@ iframe {
   max-width: 100%;
 }
 
+iframe[src*='youtube.com'] {
+  height: 400px;
+  width: 100%;
+}
+
 p > iframe {
   margin-top: 0.75rem;
   margin-bottom: 0.75rem;
@@ -1638,6 +1643,9 @@ button.close {
   }
   figure.align-left figcaption, figure.align-right figcaption, figure.align-center figcaption {
     padding: 0;
+  }
+  iframe[src*='youtube.com'] {
+    height: 300px;
   }
   .table-responsive.card__block--table {
     margin-bottom: 0;

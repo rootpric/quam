@@ -98,6 +98,9 @@
               <button type="button" autocomplete="off" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-accent btn-lg btn-raised dropdown-toggle">{% trans with {'context': 'Is a member'} %}Joined{% endtrans %}<span class="caret"></span></button>
               <ul class="dropdown-menu dropdown-menu-right">
                 <li><a href="{{ group_operations_url }}">{% trans %}Leave group{% endtrans %}</a></li>
+                {% if content.flag_mute_group_notifications|render is not empty and logged_in %}
+                  <li>{{ content.flag_mute_group_notifications }}</li>
+                {% endif %}
               </ul>
             {% elseif closed_group %}
               {% if allow_request %}

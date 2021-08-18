@@ -10,6 +10,19 @@
 // Base class
 // --------------------------------------------------
 
+body {
+  &.open-dropdown-menu {
+    @include for-tablet-landscape-down {
+      position: fixed !important;
+      width: 100%;
+      height: auto !important;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+    }
+  }
+}
+
 .nav {
   margin-bottom: 0;
   padding-left: 0; // Override default ul/ol
@@ -116,11 +129,13 @@
 
 }
 
-// Move the language switcher left of the user menu.
-@include for-tablet-landscape-up {
-  .block-social-language,
-  .block-language {
-    order: 4;
+
+.block-social-language,
+.block-language {
+  order: 4;
+
+  // Move the language switcher left of the user menu.
+  @include for-tablet-landscape-up {
     margin-left: auto;
 
     a.dropdown-toggle {
@@ -132,7 +147,6 @@
       margin-left: 0;
     }
   }
-
 }
 
 .navbar-header {
@@ -148,6 +162,7 @@
 .navbar-nav {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
 
   > li > a, > li > button {
     padding-top: 10px;
@@ -443,12 +458,16 @@
     left: 0;
     right: 0;
     width: 100%;
-    max-width: none;
-    max-height: 100%;
+    max-width: 100%;
     height: calc(100% - 50px);
     overflow-x: hidden;
     overflow-y: auto;
     backface-visibility: hidden;
+    -webkit-overflow-scrolling: touch;
+
+    li {
+      transform: translateZ(0);
+    }
   }
 
   // If users have the gin toolbar, we need to adjust the height.

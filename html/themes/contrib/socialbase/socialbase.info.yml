@@ -188,7 +188,7 @@ regions:
 regions_hidden:
   - hidden
 
-# Information added by Drupal.org packaging script on 2021-07-12
-version: '1.2.2'
+# Information added by Drupal.org packaging script on 2021-08-16
+version: '1.3.0'
 project: 'socialbase'
-datestamp: 1626085174
+datestamp: 1629125029

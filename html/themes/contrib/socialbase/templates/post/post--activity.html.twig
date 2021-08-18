@@ -67,6 +67,12 @@
     <div class="album-name">
       {{ content.field_album }}
     </div>
+
+    {% if share_post %}
+      <div class="share-button">
+        {{ share_post }}
+      </div>
+    {% endif %}
   </div>
 
 </div>

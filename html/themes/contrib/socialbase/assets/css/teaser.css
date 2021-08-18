@@ -237,6 +237,20 @@
   margin-top: 0;
 }
 
+.share-button {
+  -webkit-box-flex: 0;
+      -ms-flex: 0 0 100%;
+          flex: 0 0 100%;
+  width: 100%;
+  max-width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
 @media (min-width: 600px) {
   .teaser {
     -ms-flex-wrap: nowrap;

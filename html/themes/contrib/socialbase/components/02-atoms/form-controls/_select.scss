@@ -25,7 +25,6 @@
   max-width: $form-control-max-width;
 
   select {
-    appearance: none;
     line-height: 1;
     padding-right: 30px;
   }
@@ -67,7 +66,6 @@
   *::-ms-backdrop, .select-wrapper:after { display: none }
   *::-ms-backdrop, .select-wrapper select { padding-right: 12px }
 }
-
 
 .form-disabled .select-wrapper::after {
   color: $btn-link-disabled-color;

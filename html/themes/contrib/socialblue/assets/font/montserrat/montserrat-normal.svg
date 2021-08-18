@@ -7,9 +7,9 @@ Created by FontForge 20190801 at Tue Oct 31 14:58:12 2017
 Copyright 2011 The Montserrat Project Authors (https://github.com/JulietaUla/Montserrat)
 </metadata>
 <defs>
-<font id="montserratnormal" horiz-adv-x="0" >
+<font id="MontserratRegular" horiz-adv-x="0" >
   <font-face 
-    font-family="montserratnormal"
+    font-family="MontserratRegular"
     font-weight="400"
     font-stretch="normal"
     units-per-em="1000"

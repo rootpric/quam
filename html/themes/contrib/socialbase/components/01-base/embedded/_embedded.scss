@@ -163,6 +163,15 @@ figure {
 
 iframe {
   max-width: 100%;
+
+  &[src*='youtube.com'] {
+    height: 400px;
+    width: 100%;
+
+    @include for-phone-only {
+      height: 300px;
+    }
+  }
 }
 
 p > iframe {

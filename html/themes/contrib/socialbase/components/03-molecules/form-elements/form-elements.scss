@@ -370,3 +370,15 @@ details {
     }
   }
 }
+
+select {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  select:focus {
+    font-size: 1rem;
+  }
+}

@@ -518,9 +518,6 @@ form:not(.layout-builder-configure-block) .select-wrapper {
 }
 
 form:not(.layout-builder-configure-block) .select-wrapper select {
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
   line-height: 1;
   padding-right: 30px;
 }
