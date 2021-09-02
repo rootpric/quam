@@ -5,6 +5,6 @@
   "type": "drupal-theme",
   "minimum-stability": "dev",
   "require": {
-      "drupal/socialbase": ">=1.1"
+      "drupal/socialbase": ">=1.2 <1.3"
   }
 }

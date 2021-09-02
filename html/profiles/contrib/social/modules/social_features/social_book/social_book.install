@@ -256,3 +256,17 @@ function social_book_update_8903() {
     $source->read('social_book_static_update_8903')
   );
 }
+
+/**
+ * Updated book form labels.
+ */
+function social_book_update_10201() {
+  /** @var \Drupal\update_helper\Updater $updateHelper */
+  $updateHelper = \Drupal::service('update_helper.updater');
+
+  // Execute configuration update definitions with logging of success.
+  $updateHelper->executeUpdate('social_book', 'social_book_update_10201');
+
+  // Output logged messages to related channel of update execution.
+  return $updateHelper->logger()->output();
+}
