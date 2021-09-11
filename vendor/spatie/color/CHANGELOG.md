@@ -2,6 +2,10 @@
 
 All notable changes to `color` will be documented in this file
 
+## 1.3.0 - 2021-09-06
+- Added CIELab and XYZ color formats and `Distance` API
+- Added `Contrast` API
+
 ## 1.2.4 - 2021-02-18
 - Fixed division by zero error on pure white/black convertions ([#42](https://github.com/spatie/color/pull/42))
 
