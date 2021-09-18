@@ -8,7 +8,7 @@ core_version_requirement: ^8 || ^9
 dependencies:
   - typed_data:typed_data
 
-# Information added by Drupal.org packaging script on 2021-06-02
-version: '8.x-4.1'
+# Information added by Drupal.org packaging script on 2021-09-15
+version: '8.x-4.2'
 project: 'graphql'
-datestamp: 1622646758
+datestamp: 1631713151
