@@ -6257,41 +6257,38 @@
     },
     {
         "name": "laminas/laminas-feed",
-        "version": "2.14.1",
-        "version_normalized": "2.14.1.0",
+        "version": "2.15.0",
+        "version_normalized": "2.15.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/laminas/laminas-feed.git",
-            "reference": "463fdae515fba30633906098c258d3b2c733c15c"
+            "reference": "3ef837a12833c74b438d2c3780023c4244e0abae"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/laminas/laminas-feed/zipball/463fdae515fba30633906098c258d3b2c733c15c",
-            "reference": "463fdae515fba30633906098c258d3b2c733c15c",
+            "url": "https://api.github.com/repos/laminas/laminas-feed/zipball/3ef837a12833c74b438d2c3780023c4244e0abae",
+            "reference": "3ef837a12833c74b438d2c3780023c4244e0abae",
             "shasum": ""
         },
         "require": {
             "ext-dom": "*",
             "ext-libxml": "*",
-            "laminas/laminas-escaper": "^2.5.2",
-            "laminas/laminas-stdlib": "^3.2.1",
-            "laminas/laminas-zendframework-bridge": "^1.0",
-            "php": "^7.3 || ~8.0.0"
+            "laminas/laminas-escaper": "^2.9",
+            "laminas/laminas-stdlib": "^3.6",
+            "php": "^7.3 || ~8.0.0 || ~8.1.0"
         },
         "conflict": {
-            "laminas/laminas-servicemanager": "<3.3"
-        },
-        "replace": {
-            "zendframework/zend-feed": "^2.12.0"
+            "laminas/laminas-servicemanager": "<3.3",
+            "zendframework/zend-feed": "*"
         },
         "require-dev": {
             "laminas/laminas-cache": "^2.7.2",
-            "laminas/laminas-coding-standard": "~1.0.0",
-            "laminas/laminas-db": "^2.8.2",
-            "laminas/laminas-http": "^2.7",
-            "laminas/laminas-servicemanager": "^3.3",
-            "laminas/laminas-validator": "^2.10.1",
-            "phpunit/phpunit": "^9.3",
+            "laminas/laminas-coding-standard": "~2.2.1",
+            "laminas/laminas-db": "^2.13.3",
+            "laminas/laminas-http": "^2.15",
+            "laminas/laminas-servicemanager": "^3.7",
+            "laminas/laminas-validator": "^2.15",
+            "phpunit/phpunit": "^9.5.5",
             "psalm/plugin-phpunit": "^0.13.0",
             "psr/http-message": "^1.0.1",
             "vimeo/psalm": "^4.1"
@@ -6304,7 +6301,7 @@
             "laminas/laminas-validator": "Laminas\\Validator component, for validating email addresses used in Atom feeds and entries when using the Writer subcomponent",
             "psr/http-message": "PSR-7 ^1.0.1, if you wish to use Laminas\\Feed\\Reader\\Http\\Psr7ResponseDecorator"
         },
-        "time": "2021-04-01T19:26:09+00:00",
+        "time": "2021-09-20T18:11:11+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -6322,14 +6319,6 @@
             "feed",
             "laminas"
         ],
-        "support": {
-            "chat": "https://laminas.dev/chat",
-            "docs": "https://docs.laminas.dev/laminas-feed/",
-            "forum": "https://discourse.laminas.dev",
-            "issues": "https://github.com/laminas/laminas-feed/issues",
-            "rss": "https://github.com/laminas/laminas-feed/releases.atom",
-            "source": "https://github.com/laminas/laminas-feed"
-        },
         "funding": [
             {
                 "url": "https://funding.communitybridge.org/projects/laminas-project",
@@ -10175,17 +10164,17 @@
     },
     {
         "name": "typo3/phar-stream-wrapper",
-        "version": "v3.1.6",
-        "version_normalized": "3.1.6.0",
+        "version": "v3.1.7",
+        "version_normalized": "3.1.7.0",
         "source": {
             "type": "git",
             "url": "https://github.com/TYPO3/phar-stream-wrapper.git",
-            "reference": "60131cb573a1e478cfecd34e4ea38e3b31505f75"
+            "reference": "5cc2f04a4e2f5c7e9cc02a3bdf80fae0f3e11a8c"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/TYPO3/phar-stream-wrapper/zipball/60131cb573a1e478cfecd34e4ea38e3b31505f75",
-            "reference": "60131cb573a1e478cfecd34e4ea38e3b31505f75",
+            "url": "https://api.github.com/repos/TYPO3/phar-stream-wrapper/zipball/5cc2f04a4e2f5c7e9cc02a3bdf80fae0f3e11a8c",
+            "reference": "5cc2f04a4e2f5c7e9cc02a3bdf80fae0f3e11a8c",
             "shasum": ""
         },
         "require": {
@@ -10200,7 +10189,7 @@
         "suggest": {
             "ext-fileinfo": "For PHP builtin file type guessing, otherwise uses internal processing"
         },
-        "time": "2020-11-07T09:06:16+00:00",
+        "time": "2021-09-20T19:19:13+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -10224,11 +10213,7 @@
             "php",
             "security",
             "stream-wrapper"
-        ],
-        "support": {
-            "issues": "https://github.com/TYPO3/phar-stream-wrapper/issues",
-            "source": "https://github.com/TYPO3/phar-stream-wrapper/tree/v3.1.6"
-        }
+        ]
     },
     {
         "name": "webonyx/graphql-php",
