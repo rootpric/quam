@@ -8254,17 +8254,17 @@
     },
     {
         "name": "symfony/debug",
-        "version": "v4.4.27",
-        "version_normalized": "4.4.27.0",
+        "version": "v4.4.31",
+        "version_normalized": "4.4.31.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/debug.git",
-            "reference": "2f9160e92eb64c95da7368c867b663a8e34e980c"
+            "reference": "43ede438d4cb52cd589ae5dc070e9323866ba8e0"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/debug/zipball/2f9160e92eb64c95da7368c867b663a8e34e980c",
-            "reference": "2f9160e92eb64c95da7368c867b663a8e34e980c",
+            "url": "https://api.github.com/repos/symfony/debug/zipball/43ede438d4cb52cd589ae5dc070e9323866ba8e0",
+            "reference": "43ede438d4cb52cd589ae5dc070e9323866ba8e0",
             "shasum": ""
         },
         "require": {
@@ -8277,7 +8277,7 @@
         "require-dev": {
             "symfony/http-kernel": "^3.4|^4.0|^5.0"
         },
-        "time": "2021-07-22T07:21:39+00:00",
+        "time": "2021-09-24T13:30:14+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -9872,17 +9872,17 @@
     },
     {
         "name": "symfony/var-dumper",
-        "version": "v4.4.30",
-        "version_normalized": "4.4.30.0",
+        "version": "v4.4.31",
+        "version_normalized": "4.4.31.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/var-dumper.git",
-            "reference": "7f65c44c2ce80d3a0fcdb6385ee0ad535e45660c"
+            "reference": "1f12cc0c2e880a5f39575c19af81438464717839"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/var-dumper/zipball/7f65c44c2ce80d3a0fcdb6385ee0ad535e45660c",
-            "reference": "7f65c44c2ce80d3a0fcdb6385ee0ad535e45660c",
+            "url": "https://api.github.com/repos/symfony/var-dumper/zipball/1f12cc0c2e880a5f39575c19af81438464717839",
+            "reference": "1f12cc0c2e880a5f39575c19af81438464717839",
             "shasum": ""
         },
         "require": {
@@ -9906,7 +9906,7 @@
             "ext-intl": "To show region name in time zone dump",
             "symfony/console": "To use the ServerDumpCommand and/or the bin/var-dump-server script"
         },
-        "time": "2021-08-04T20:31:23+00:00",
+        "time": "2021-09-24T15:30:11+00:00",
         "bin": [
             "Resources/bin/var-dump-server"
         ],
