@@ -4,6 +4,7 @@ namespace Drupal\data_policy_export\Plugin\Action;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Datetime\DateFormatterInterface;
+use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Messenger\MessengerTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Session\AccountProxyInterface;
@@ -62,6 +63,13 @@ class ExportDataPolicy extends ViewsBulkOperationsActionBase implements Containe
   protected $dateFormatter;
 
   /**
+   * The file system service.
+   *
+   * @var \Drupal\Core\File\FileSystemInterface
+   */
+  protected $fileSystem;
+
+  /**
    * Constructs a ExportDataPolicy object.
    *
    * @param array $configuration
@@ -80,14 +88,17 @@ class ExportDataPolicy extends ViewsBulkOperationsActionBase implements Containe
    *   Config factory for the export plugin access.
    * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
    *   Date formatter to be able to format the date to human-friendly.
+   * @param \Drupal\Core\File\FileSystemInterface $file_system
+   *   The file system service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, DataPolicyExportPluginManager $dataPolicyExportPlugin, LoggerInterface $logger, AccountProxyInterface $currentUser, ConfigFactoryInterface $configFactory, DateFormatterInterface $date_formatter) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, DataPolicyExportPluginManager $dataPolicyExportPlugin, LoggerInterface $logger, AccountProxyInterface $currentUser, ConfigFactoryInterface $configFactory, DateFormatterInterface $date_formatter, FileSystemInterface $file_system) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->dataPolicyExportPlugin = $dataPolicyExportPlugin;
     $this->logger = $logger;
     $this->currentUser = $currentUser;
     $this->dateFormatter = $date_formatter;
+    $this->fileSystem = $file_system;
   }
 
   /**
@@ -99,7 +110,8 @@ class ExportDataPolicy extends ViewsBulkOperationsActionBase implements Containe
       $container->get('logger.factory')->get('action'),
       $container->get('current_user'),
       $container->get('config.factory'),
-      $container->get('date.formatter')
+      $container->get('date.formatter'),
+      $container->get('file_system')
     );
   }
 
@@ -160,7 +172,7 @@ class ExportDataPolicy extends ViewsBulkOperationsActionBase implements Containe
       $name = basename($this->context['sandbox']['results']['file_path']);
       $path = 'private://csv';
 
-      if (file_prepare_directory($path, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS) && (file_save_data($data, $path . '/' . $name))) {
+      if ($this->fileSystem->prepareDirectory($path, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS) && (file_save_data($data, $path . '/' . $name))) {
         $url = Url::fromUri(file_create_url($path . '/' . $name));
         $link = Link::fromTextAndUrl($this->t('Download file'), $url);
 
@@ -220,7 +232,7 @@ class ExportDataPolicy extends ViewsBulkOperationsActionBase implements Containe
   /**
    * Returns the directory that forms the base for this exports file output.
    *
-   * This method wraps file_directory_temp() to give inheriting classes the
+   * This method wraps FileSystemInterface::getTempDirectory() to give inheriting classes the
    * ability to use a different file system than the temporary file system.
    * This was previously possible but was changed in #3075818.
    *
@@ -228,7 +240,7 @@ class ExportDataPolicy extends ViewsBulkOperationsActionBase implements Containe
    *   The path to the Drupal directory that should be used for this export.
    */
   protected function getBaseOutputDirectory() : string {
-    return file_directory_temp();
+    return $this->fileSystem->getTempDirectory();
   }
 
   /**

@@ -106,12 +106,12 @@ class InformBlockForm extends EntityForm {
     $status = $informblock->save();
 
     if ($status) {
-      drupal_set_message($this->t('Saved the %label Example.', [
+      $this->messenger()->addStatus($this->t('Saved the %label Example.', [
         '%label' => $informblock->label(),
       ]));
     }
     else {
-      drupal_set_message($this->t('The %label Example was not saved.', [
+      $this->messenger()->addStatus($this->t('The %label Example was not saved.', [
         '%label' => $informblock->label(),
       ]));
     }

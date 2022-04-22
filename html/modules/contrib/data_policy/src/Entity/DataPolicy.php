@@ -38,6 +38,11 @@ use Drupal\user\UserInterface;
  *   revision_data_table = "data_policy_field_revision",
  *   translatable = TRUE,
  *   admin_permission = "administer data policy entities",
+ *   revision_metadata_keys = {
+ *     "revision_user" = "revision_user",
+ *     "revision_created" = "revision_created",
+ *     "revision_log_message" = "revision_log_message"
+ *   },
  *   entity_keys = {
  *     "id" = "id",
  *     "revision" = "vid",

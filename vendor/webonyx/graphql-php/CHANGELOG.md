@@ -2,6 +2,46 @@
 
 #### Unreleased
 
+#### 14.11.6
+
+Fixed:
+- Fix validation of modified sparse ASTs
+
+#### 14.11.5
+
+Fixed:
+- Fix `extend()` to preserve `repeatable` (#931)
+
+#### 14.11.4
+
+Fixed:
+- Fix repeatable directive validation for AST
+
+#### 14.11.3
+
+Fixed:
+- Fix compatibility of more methods with native return type in PHP 8.1
+
+#### 14.11.2
+
+Fixed:
+- Support non-JSON `ServerRequestInterface`
+
+#### 14.11.1
+
+Fixed:
+- Fix compatibility of methods with native return type in PHP 8.1
+
+#### 14.11.0
+
+Feat:
+- Allow field definitions to be defined as any `iterable`, not just `array`
+
+#### 14.10.0
+
+Feat:
+- Make `IntType` constants `MAX_INT` and `MIN_INT` public
+
 #### 14.9.0
 
 Feat:

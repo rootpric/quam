@@ -1,3 +1,6 @@
+
+[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/support-ukraine.svg?t=1" />](https://supportukrainenow.org)
+
 # A little library to handle color conversions and comparisons
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/color.svg?style=flat-square)](https://packagist.org/packages/spatie/color)
@@ -23,10 +26,17 @@ $rgba->alpha(); // 1
 echo $rgba; // rgba(55,155,255,1)
 
 $hex = $rgb->toHex(); // `Spatie\Color\Hex`
+$rgba->alpha(); // ff
 echo $hex; // #379bff
 
-$hsl = $rgb->toHsl();
+$cmyk = $rgb->toCmyk(); // `Spatie\Color\Cmyk`
+echo $cmyk; // cmyk(78,39,0,0)
+
+$hsl = $rgb->toHsl(); // `Spatie\Color\Hsl`
 echo $hsl; // hsl(210,100%,100%)
+
+$hsb = $rgb->toHsb(); // `Spatie\Color\Hsb`
+echo $hsb; // hsl(210,78.4%,100%)
 
 $lab = $rgb->toCIELab();
 echo $lab; // CIELab(62.91,5.34,-57.73)
@@ -36,18 +46,21 @@ echo $xyz; // xyz(31.3469,31.4749,99.0308)
 
 $hex2 = Hex::fromString('#2d78c8');
 
+$ratio = Contrast::ratio(Hex::fromString('#f0fff0'), Hex::fromString('#191970')); 
+echo $ratio; // 15.0
+
 $cie76_distance = Distance::CIE76($rgb, $hex2);
 $cie76_distance = Distance::CIE76('rgba(55,155,255,1)', '#2d78c8'); // Outputs the same thing, Factory is built-in to all comparison functions
-echo $cie76_distance; // 55.894680426674
+echo $cie76_distance; // 55.89468042667388
 
 $cie94_distance = Distance::CIE94($rgb, $hex2);
-echo $cie94_distance; // 13.490919427908
+echo $cie94_distance; // 13.49091942790753
 
 $cie94_textiles_distance = Distance::CIE94($rgb, $hex2, 1); // Third parameter optionally sets the application type (0 = Graphic Arts [Default], 1 = Textiles)
 echo $cie94_textiles_distance; // 7.0926538068477
 
 $ciede2000_distance = Distance::CIEDE2000($rgb, $hex2);
-echo $ciede2000_distance; // 12.711957696301
+echo $ciede2000_distance; // 12.711957696300898
 ```
 
 ## Support us
@@ -73,7 +86,9 @@ The `Color` package contains a separate class per color format, which each imple
 There are seven classes which implement the `Color` interface:
 
 - `CIELab`
+- `Cmyk`
 - `Hex`
+- `Hsb`
 - `Hsl`
 - `Hsla`
 - `Rgb`
@@ -123,6 +138,15 @@ Hex::fromString('#0000ff')->blue(); // 'ff'
 Rgb::fromString('rgb(0, 0, 255)')->blue(); // 255
 ```
 
+#### `toCmyk(): Cmyk`
+
+Convert a color to a `Cmyk` color.
+
+```php
+Rgb::fromString('rgb(0, 0, 255)')->toCmyk();
+// `Cmyk` instance; 'cmyk(100,100,0,0)'
+```
+
 #### `toHex(): Hex`
 
 Convert a color to a `Hex` color.
@@ -132,7 +156,17 @@ Rgb::fromString('rgb(0, 0, 255)')->toHex();
 // `Hex` instance; '#0000ff'
 ```
 
-When coming from a color format that supports opacity, the opacity will simply be omitted.
+When coming from a color format that doesn't support opacity, it can be added by passing it to the `$alpha` parameter.
+
+
+#### `toHsb(): Hsb`
+
+Convert a color to a `Hsb` color.
+
+```php
+Rgb::fromString('rgb(0, 0, 255)')->toHsb();
+// `Hsl` instance; 'hsb(240, 100%, 100%)'
+```
 
 #### `toHsl(): Hsl`
 
@@ -233,11 +267,11 @@ $ composer test
 
 ## Contributing
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+Please see [CONTRIBUTING](https://github.com/spatie/.github/blob/main/CONTRIBUTING.md) for details.
 
 ## Security
 
-If you discover any security related issues, please email freek@spatie.be instead of using the issue tracker.
+If you've found a bug regarding security please mail [security@spatie.be](mailto:security@spatie.be) instead of using the issue tracker.
 
 ## Credits
 

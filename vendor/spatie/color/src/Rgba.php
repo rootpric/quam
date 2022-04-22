@@ -30,7 +30,7 @@ class Rgba implements Color
         Validate::rgbaColorString($string);
 
         $matches = null;
-        preg_match('/rgba\( *(\d{1,3} *, *\d{1,3} *, *\d{1,3} *, *[0-1](\.\d{1,2})?) *\)/i', $string, $matches);
+        preg_match('/rgba\( *(\d{1,3} *, *\d{1,3} *, *\d{1,3} *, *[0-1](\.\d{1,})?) *\)/i', $string, $matches);
 
         $channels = explode(',', $matches[1]);
         [$red, $green, $blue, $alpha] = array_map('trim', $channels);
@@ -63,9 +63,19 @@ class Rgba implements Color
         return $this->toRgb()->toCIELab();
     }
 
-    public function toHex(): Hex
+    public function toCmyk(): Cmyk
     {
-        return $this->toRgb()->toHex();
+        return $this->toRgb()->toCmyk();
+    }
+
+    public function toHex(string $alpha = 'ff'): Hex
+    {
+        return $this->toRgb()->toHex($alpha);
+    }
+
+    public function toHsb(): Hsb
+    {
+        return $this->toRgb()->toHsb();
     }
 
     public function toHsl(): Hsl

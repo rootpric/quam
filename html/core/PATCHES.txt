@@ -57,3 +57,7 @@ Empty language (langcode) field wrapper inserted into contact form
 Source: https://www.drupal.org/files/issues/2020-03-06/empty-langcode-field-wrapper-2842405-17.patch
 
 
+Backport Drupal 9.x SA-CORE-2022-001 to Open Social 10.x versions
+Source: https://www.drupal.org/files/issues/2022-01-20/3259572-Backport-Drupal-9.x-SA-CORE-2022-001-1.patch
+
+

@@ -19,8 +19,15 @@ class Validate
 
     public static function CIELabColorString($string): void
     {
-        if (! preg_match('/^ *CIELab\( *\d{1,3}\.?\d+? *, *-?\d{1,3}\.?\d+? *, *-?\d{1,3}\.?\d+? *\) *$/i', $string)) {
+        if (! preg_match('/^ *CIELab\( *\d{1,3}\.?\d* *, *-?\d{1,3}\.?\d* *, *-?\d{1,3}\.?\d* *\) *$/i', $string)) {
             throw InvalidColorValue::malformedCIELabColorString($string);
+        }
+    }
+
+    public static function cmykValue(float $value, string $name): void
+    {
+        if ($value < 0 || $value > 1) {
+            throw InvalidColorValue::cmykValueNotInRange($value, $name);
         }
     }
 
@@ -49,10 +56,36 @@ class Validate
         }
     }
 
+    public static function hsbValue(float $value, string $name): void
+    {
+        switch ($name) {
+            case 'hue':
+                if ($value < 0 || $value > 360) {
+                    throw InvalidColorValue::hsbValueNotInRange($value, $name);
+                }
+
+                break;
+
+            default:
+                if ($value < 0 || $value > 100) {
+                    throw InvalidColorValue::hsbValueNotInRange($value, $name);
+                }
+
+                break;
+        }
+    }
+
     public static function hslValue(float $value, string $name): void
     {
         if ($value < 0 || $value > 100) {
             throw InvalidColorValue::hslValueNotInRange($value, $name);
+        }
+    }
+
+    public static function cmykColorString($string): void
+    {
+        if (! preg_match('/^ *cmyk\( *(\d{1,3})%? *, *(\d{1,3})%? *, *(\d{1,3})%? *, *(\d{1,3})%? *\) *$/i', $string)) {
+            throw InvalidColorValue::malformedCmykColorString($string);
         }
     }
 
@@ -65,15 +98,22 @@ class Validate
 
     public static function rgbaColorString($string): void
     {
-        if (! preg_match('/^ *rgba\( *\d{1,3} *, *\d{1,3} *, *\d{1,3} *, *[0-1](\.\d{1,2})? *\) *$/i', $string)) {
+        if (! preg_match('/^ *rgba\( *\d{1,3} *, *\d{1,3} *, *\d{1,3} *, *[0-1](\.\d{1,})? *\) *$/i', $string)) {
             throw InvalidColorValue::malformedRgbaColorString($string);
         }
     }
 
     public static function hexColorString($string): void
     {
-        if (! preg_match('/^#[a-f0-9]{6}$/i', $string)) {
+        if (! preg_match('/^#(?:[a-f0-9]{3}|[a-f0-9]{4}|[a-f0-9]{6}|[a-f0-9]{8})$/i', $string)) {
             throw InvalidColorValue::malformedHexColorString($string);
+        }
+    }
+
+    public static function hsbColorString($string): void
+    {
+        if (! preg_match('/^ *hs[vb]\( *-?\d{1,3} *, *\d{1,3}%? *, *\d{1,3}%? *\) *$/i', $string)) {
+            throw InvalidColorValue::malformedHslColorString($string);
         }
     }
 

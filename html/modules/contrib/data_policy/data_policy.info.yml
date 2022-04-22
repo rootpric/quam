@@ -1,12 +1,13 @@
 name: Data Policy
 description: Create data policies and track user agreements as well as informing users.
-core: 8.x
+core_version_requirement: ^8.9 || ^9
 configure: entity.informblock.collection
 dependencies:
   - drupal:block
+  - drupal:path_alias
 type: module
 
-# Information added by Drupal.org packaging script on 2021-07-26
-version: '8.x-1.0-rc3'
+# Information added by Drupal.org packaging script on 2021-10-20
+version: '8.x-1.2'
 project: 'data_policy'
-datestamp: 1627306195
+datestamp: 1634739206

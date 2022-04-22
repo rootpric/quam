@@ -5,14 +5,15 @@
  * The Data Policy Export module.
  */
 
+use Drupal\Core\StreamWrapper\StreamWrapperManager;
 use Drupal\file\Entity\File;
 
 /**
  * Implements hook_file_download().
  */
 function data_policy_export_file_download($uri) {
-  $scheme = \Drupal::service('file_system')->uriScheme($uri);
-  $target = file_uri_target($uri);
+  $scheme = StreamWrapperManager::getScheme($uri);
+  $target = StreamWrapperManager::getTarget($uri);
 
   // Get the file to see who the owner is.
   $query = \Drupal::entityQuery('file');

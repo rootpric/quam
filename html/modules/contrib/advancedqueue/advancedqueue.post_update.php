@@ -7,6 +7,7 @@
 
 use Drupal\Core\Config\ExtensionInstallStorage;
 use Drupal\Core\Config\InstallStorage;
+use Drupal\Core\Config\StorageInterface;
 
 /**
  * Replace the "advancedqueue_jobs" view with the updated version.
@@ -20,7 +21,7 @@ function advancedqueue_post_update_1() {
     return;
   }
   $config_storage = \Drupal::service('config.storage');
-  $extension_config_storage = new ExtensionInstallStorage($config_storage, InstallStorage::CONFIG_INSTALL_DIRECTORY);
+  $extension_config_storage = new ExtensionInstallStorage($config_storage, InstallStorage::CONFIG_INSTALL_DIRECTORY, StorageInterface::DEFAULT_COLLECTION, TRUE, \Drupal::installProfile());
   $config_data = $extension_config_storage->read('views.view.advancedqueue_jobs');
 
   $view->setSyncing(TRUE);

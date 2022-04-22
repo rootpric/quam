@@ -45,6 +45,32 @@ class Convert
         return [$x, $y, $z];
     }
 
+    public static function cmykValueToRgb(float $cyan, float $magenta, float $yellow, float $key): array
+    {
+        return [
+            (int) (255 * (1 - $cyan) * (1 - $key)),
+            (int) (255 * (1 - $magenta) * (1 - $key)),
+            (int) (255 * (1 - $yellow) * (1 - $key)),
+        ];
+    }
+
+    public static function rgbValueToCmyk($red, $green, $blue): array
+    {
+        $red /= 255;
+        $green /= 255;
+        $blue /= 255;
+
+        $black = 1 - max($red, $green, $blue);
+        $keyNeg = (1 - $black);
+
+        return [
+            ($keyNeg - $red) / $keyNeg,
+            ($keyNeg - $green) / $keyNeg,
+            ($keyNeg - $blue) / $keyNeg,
+            $black,
+        ];
+    }
+
     public static function hexChannelToRgbChannel(string $hexValue): int
     {
         return hexdec($hexValue);
@@ -55,9 +81,83 @@ class Convert
         return str_pad(dechex($rgbValue), 2, '0', STR_PAD_LEFT);
     }
 
+    public static function hsbValueToRgb($hue, $saturation, $brightness)
+    {
+        while ($hue > 360) {
+            $hue -= 360.0;
+        }
+        while ($hue < 0) {
+            $hue += 360.0;
+        }
+
+        $hue /= 360;
+        $saturation /= 100;
+        $brightness /= 100;
+
+        if ($saturation == 0) {
+            $R = $G = $B = $brightness * 255;
+        } else {
+            $hue = $hue * 6;
+            $i = floor($hue);
+            $j = $brightness * (1 - $saturation);
+            $k = $brightness * (1 - $saturation * ($hue - $i));
+            $l = $brightness * (1 - $saturation * (1 - ($hue - $i)));
+
+            switch ($i) {
+                case 0:
+                    $red = $brightness;
+                    $green = $l;
+                    $blue = $j;
+
+                    break;
+
+                case 1:
+                    $red = $k;
+                    $green = $brightness;
+                    $blue = $j;
+
+                    break;
+
+                case 2:
+                    $red = $j;
+                    $green = $brightness;
+                    $blue = $l;
+
+                    break;
+
+                case 3:
+                    $red = $j;
+                    $green = $k;
+                    $blue = $brightness;
+
+                    break;
+
+                case 4:
+                    $red = $l;
+                    $green = $j;
+                    $blue = $brightness;
+
+                    break;
+
+                default:
+                    $red = $brightness;
+                    $green = $j;
+                    $blue = $k;
+
+                    break;
+            }
+
+            $R = $red * 255;
+            $G = $green * 255;
+            $B = $blue * 255;
+        }
+
+        return [round($R), round($G), round($B)];
+    }
+
     public static function hslValueToRgb(float $hue, float $saturation, float $lightness): array
     {
-        $h = (360 + ($hue % 360)) % 360;  // hue values can be less than 0 and greater than 360. This normalises them into the range 0-360.
+        $h = intval((360 + (intval($hue) % 360)) % 360);  // hue values can be less than 0 and greater than 360. This normalises them into the range 0-360.
 
         $c = (1 - abs(2 * ($lightness / 100) - 1)) * ($saturation / 100);
         $x = $c * (1 - abs(fmod($h / 60, 2) - 1));
@@ -88,6 +188,52 @@ class Convert
         }
     }
 
+    public static function rgbValueToHsb($red, $green, $blue): array
+    {
+        $red /= 255;
+        $green /= 255;
+        $blue /= 255;
+
+        $min = min($red, $green, $blue);
+        $max = max($red, $green, $blue);
+        $delMax = $max - $min;
+
+        $brightness = $max;
+        $hue = 0;
+
+        if ($delMax == 0) {
+            $hue = 0;
+            $saturation = 0;
+        } else {
+            $saturation = $delMax / $max;
+
+            $delR = ((($max - $red) / 6) + ($delMax / 2)) / $delMax;
+            $delG = ((($max - $green) / 6) + ($delMax / 2)) / $delMax;
+            $delB = ((($max - $blue) / 6) + ($delMax / 2)) / $delMax;
+
+            if ($red == $max) {
+                $hue = $delB - $delG;
+            } else {
+                if ($green == $max) {
+                    $hue = (1 / 3) + $delR - $delB;
+                } else {
+                    if ($blue == $max) {
+                        $hue = (2 / 3) + $delG - $delR;
+                    }
+                }
+            }
+
+            if ($hue < 0) {
+                $hue++;
+            }
+            if ($hue > 1) {
+                $hue--;
+            }
+        }
+
+        return [round($hue, 2) * 360, round($saturation, 2) * 100, round($brightness, 2) * 100];
+    }
+
     public static function rgbValueToHsl($red, $green, $blue): array
     {
         $r = $red / 255;
@@ -102,6 +248,7 @@ class Convert
         if ($delta != 0) {
             if ($r === $cmax) {
                 $hue = 60 * fmod(($g - $b) / $delta, 6);
+                $hue = $hue < 0 ? $hue + 360 : $hue ;
             }
 
             if ($g === $cmax) {
@@ -233,9 +380,9 @@ class Convert
             $b = 12.92 * $b;
         }
 
-        $r = max(0, min(255, $r * 255));
-        $g = max(0, min(255, $g * 255));
-        $b = max(0, min(255, $b * 255));
+        $r = intval(max(0, min(255, $r * 255)));
+        $g = intval(max(0, min(255, $g * 255)));
+        $b = intval(max(0, min(255, $b * 255)));
 
         return [$r, $g, $b];
     }
